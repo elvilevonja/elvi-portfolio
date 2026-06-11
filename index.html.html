@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELVI — Video & Photo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:      #1c1f1e;
+  --surface: #252928;
+  --white:   #e8f5f2;
+  --mid:     rgba(232,245,242,0.50);
+  --faint:   rgba(0,229,160,0.06);
+  --accent:  #00e5a0;
+  --border:  rgba(232,245,242,0.12);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+
+/* ── GRAIN OVERLAY ──────────────────────── */
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.045;
+  pointer-events: none;
+  z-index: 9000;
+}
+
+/* ── SECTION DIVIDER RULE ───────────────── */
+.sec-rule {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 16px;
+}
+.sec-rule::before {
+  content: "";
+  display: block; width: 40px; height: 1px;
+  background: var(--accent); flex-shrink: 0;
+}
+
+/* ── MARQUEE ────────────────────────────── */
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  background: var(--surface);
+  white-space: nowrap;
+}
+.marquee-track {
+  display: inline-flex; gap: 0;
+  animation: marquee 22s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-item {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 13px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--mid);
+  padding: 0 28px;
+}
+.marquee-dot {
+  color: var(--accent); padding: 0 4px;
+}
+
+/* ── HERO PHOTO OVERLAY TWEAK ───────────── */
+.hero-bg::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(28,31,30,0.35);
+  z-index: 1;
+}
+.hero-bg::after {
+  z-index: 2;
+}
+
+/* ── NAV ─────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5%; height: 62px;
+  background: rgba(28,31,30,0.85);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  animation: fadeDown 0.7s ease both;
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px; letter-spacing: 5px;
+  color: var(--white); text-decoration: none;
+}
+.nav-links { display: flex; gap: 34px; list-style: none; }
+.nav-links a {
+  font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--mid); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--white); background: transparent;
+  border: 1px solid rgba(244,244,244,0.35);
+  padding: 9px 22px; font-family: 'Outfit', sans-serif;
+  font-weight: 500; text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.nav-cta:hover { background: var(--accent); color: #0a0f0d; border-color: var(--accent); }
+
+/* ── HERO ────────────────────────────────── */
+#hero {
+  position: relative;
+  height: 100vh; min-height: 620px;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 5% 72px;
+  overflow: hidden;
+  margin-top: 0;
+}
+/* ▼ HERO PHOTO — paste your image URL below ▼ */
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image: url('hero-bg.jpg');
+  background-size: cover; background-position: center 30%;
+  transform: scale(1.04);
+  animation: zoomIn 9s ease-out forwards;
+}
+@keyframes zoomIn { to { transform: scale(1); } }
+.hero-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(28,31,30,0.97) 0%,
+    rgba(28,31,30,0.48) 50%,
+    rgba(28,31,30,0.12) 100%
+  );
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-eyebrow {
+  font-size: 11px; letter-spacing: 3.5px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+  opacity: 0; animation: up 0.7s 0.3s ease both;
+}
+.hero-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 16vw, 200px);
+  line-height: 0.9; letter-spacing: 2px;
+  color: var(--white);
+  opacity: 0; animation: up 0.8s 0.45s ease both;
+}
+.hero-rule {
+  width: 48px; height: 1px; background: rgba(244,244,244,0.3);
+  margin: 14px 0;
+  opacity: 0; animation: up 0.6s 0.6s ease both;
+}
+.hero-sub {
+  font-size: 15px; font-weight: 300; color: var(--mid);
+  max-width: 420px; line-height: 1.75;
+  opacity: 0; animation: up 0.7s 0.72s ease both;
+}
+.hero-foot {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-top: 32px;
+  opacity: 0; animation: up 0.7s 0.85s ease both;
+}
+.scroll-hint {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--mid); display: flex; align-items: center; gap: 12px;
+}
+.scroll-hint::before { content: ''; display: block; width: 36px; height: 1px; background: var(--mid); }
+.hero-stats { display: flex; gap: 44px; }
+.hstat { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.hstat-n {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 34px; line-height: 1; color: var(--white);
+}
+.hstat-l { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); }
+@keyframes up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SHARED SECTION ──────────────────────── */
+section { padding: 80px 5%; }
+.reveal {
+  opacity: 0; transform: translateY(36px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.sec-label {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.sec-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(44px, 7vw, 88px);
+  line-height: 0.94; letter-spacing: 1px; color: var(--white);
+}
+
+/* ── WORK ────────────────────────────────── */
+#work { padding-top: 80px; }
+.work-top {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 36px;
+}
+.ftabs { display: flex; gap: 2px; }
+.ftab {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 8px 18px; cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--mid);
+  font-family: 'Outfit', sans-serif; transition: all 0.18s;
+}
+.ftab.active, .ftab:hover {
+  background: var(--accent); color: #0a0f0d; border-color: var(--accent);
+}
+
+/*
+═══════════════════════════════════════════════════
+  PORTFOLIO GRID — HOW TO EDIT
+───────────────────────────────────────────────────
+  SIZE:   span-8 = big  |  span-6 = half  |  span-4 = small
+          Each row = 12 columns. Sizes per row add to 12.
+
+  YOUR IMAGE: On the inner .wi-bg div, add:
+    style="background-image: url('your-image.jpg')"
+
+  TITLE & CATEGORY: Edit .wi-title and .wi-cat text
+
+  ADD PROJECT: Copy a work-item block, paste inside grid
+  REMOVE:      Delete the work-item block
+
+  FILTER: data-type="video"  or  data-type="photo"
+═══════════════════════════════════════════════════
+*/
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+}
+.work-item {
+  position: relative; overflow: hidden; cursor: pointer;
+  background: var(--surface);
+}
+.work-item.span-8 { grid-column: span 8; aspect-ratio: 16/9; }
+.work-item.span-6 { grid-column: span 6; aspect-ratio: 4/3; }
+.work-item.span-4 { grid-column: span 4; aspect-ratio: 4/5; }
+.wi-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.work-item:hover .wi-bg { transform: scale(1.06); }
+.wi-ph {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
+  background: repeating-linear-gradient(
+    45deg,
+    #252928 0px, #252928 12px,
+    #2a2e2d 12px, #2a2e2d 24px
+  );
+}
+.wi-ph svg { opacity: 0.18; }
+.wi-ph span { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #444; }
+.wi-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(17,17,17,0.88) 0%, rgba(17,17,17,0.08) 55%, transparent 100%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 20px 22px; opacity: 0; transition: opacity 0.28s;
+}
+.work-item:hover .wi-overlay { opacity: 1; }
+.wi-cat {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 4px;
+}
+.wi-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 21px; letter-spacing: 1px; color: var(--white);
+}
+/* top-border sweep on hover */
+.work-item::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.38s ease; z-index: 3;
+}
+.work-item:hover::before { transform: scaleX(1); }
+
+/* ── ABOUT ───────────────────────────────── */
+#about { border-top: 1px solid var(--border); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start; margin-top: 56px;
+}
+
+/* ▼ ABOUT PHOTO — swap the placeholder with your headshot ▼ */
+.about-photo-wrap {
+  position: relative;
+  aspect-ratio: 3/4; overflow: hidden;
+  background: var(--surface);
+}
+.about-photo-wrap img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.about-photo-ph {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+}
+.about-photo-ph svg { opacity: 0.15; }
+.about-photo-ph span {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #444;
+}
+.about-right { display: flex; flex-direction: column; gap: 32px; }
+.about-bio p {
+  font-size: 17px; font-weight: 300; color: var(--mid); line-height: 1.85;
+}
+.about-bio p + p { margin-top: 16px; }
+.about-bio strong { color: var(--white); font-weight: 500; }
+.about-facts { display: flex; flex-direction: column; }
+.fact-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+}
+.fact-row:first-child { border-top: 1px solid var(--border); }
+.fact-key { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); }
+.fact-val { font-size: 14px; font-weight: 400; color: var(--white); text-align: right; }
+
+/* ── CONTACT ─────────────────────────────── */
+#contact { border-top: 1px solid var(--border); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1.1fr;
+  gap: 80px; align-items: start; margin-top: 56px;
+}
+.contact-left p {
+  font-size: 16px; font-weight: 300; color: var(--mid);
+  line-height: 1.8; margin-bottom: 36px; max-width: 360px;
+}
+.contact-details { display: flex; flex-direction: column; gap: 14px; }
+.cdet {
+  display: flex; align-items: center; gap: 14px;
+  font-size: 13px; color: var(--mid);
+}
+.cdet-dot { width: 4px; height: 4px; background: var(--white); border-radius: 50%; opacity: 0.4; flex-shrink: 0; }
+.cdet strong { color: var(--white); font-weight: 500; }
+
+/* form */
+.fg { margin-bottom: 14px; }
+.fl {
+  display: block; font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--mid); margin-bottom: 7px;
+}
+.fi, .ft, .fs {
+  width: 100%; padding: 13px 15px;
+  background: var(--faint); border: 1px solid var(--border);
+  color: var(--white); font-family: 'Outfit', sans-serif; font-size: 15px;
+  outline: none; transition: border-color 0.2s; appearance: none;
+}
+.fi::placeholder, .ft::placeholder { color: rgba(244,244,244,0.2); }
+.fi:focus, .ft:focus, .fs:focus { border-color: rgba(244,244,244,0.45); }
+.fs option { background: #252928; color: var(--white); }
+.ft { height: 118px; resize: vertical; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fsub {
+  width: 100%; padding: 15px; margin-top: 4px;
+  background: var(--accent); color: #0a0f0d;
+  border: none; font-family: 'Outfit', sans-serif;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+}
+.fsub:hover { opacity: 0.82; }
+.fsuccess {
+  display: none; margin-top: 14px;
+  border: 1px solid var(--border); padding: 13px 16px;
+  font-size: 13px; color: var(--mid); letter-spacing: 0.3px;
+}
+
+/* ── FOOTER ──────────────────────────────── */
+footer {
+  padding: 26px 5%;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.f-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 4px;
+  color: var(--mid); text-decoration: none;
+}
+.f-copy { font-size: 11px; letter-spacing: 0.5px; color: rgba(244,244,244,0.25); }
+
+/* ── RESPONSIVE ──────────────────────────── */
+@media (max-width: 860px) {
+  .nav-links { display: none; }
+  .work-item.span-8 { grid-column: span 12; }
+  .work-item.span-6 { grid-column: span 12; }
+  .work-item.span-4 { grid-column: span 6; }
+  .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 44px; }
+  .frow { grid-template-columns: 1fr; }
+  .hero-stats { gap: 22px; }
+  footer { flex-direction: column; gap: 8px; text-align: center; }
+}
+
+/* ── PLAY BUTTON ON VIDEO CARDS ─────────── */
+.play-btn {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px; height: 52px;
+  border: 2px solid rgba(255,255,255,0.6);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.25s;
+  z-index: 4;
+}
+.work-item:hover .play-btn { opacity: 1; }
+
+/* ── PHOTO SECTION ──────────────────────── */
+#photo { border-top: 1px solid var(--border); }
+.photo-gallery { margin-top: 0; }
+.ph-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+.ph-item {
+  position: relative;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--surface);
+}
+.ph-thumb {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.ph-item:hover .ph-thumb { transform: scale(1.06); }
+.ph-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(
+    45deg,
+    #252928 0px, #252928 12px,
+    #2a2e2d 12px, #2a2e2d 24px
+  );
+}
+.ph-ph svg { opacity: 0.18; }
+.ph-overlay {
+  position: absolute; inset: 0;
+  background: rgba(28,31,30,0.55);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.25s;
+}
+.ph-item:hover .ph-overlay { opacity: 1; }
+.ph-overlay span {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--white); border: 1px solid rgba(255,255,255,0.5);
+  padding: 8px 20px;
+}
+.ph-item::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.38s ease; z-index: 3;
+}
+.ph-item:hover::before { transform: scaleX(1); }
+
+/* ── LIGHTBOX ───────────────────────────── */
+.lightbox {
+  display: none;
+  position: fixed; inset: 0; z-index: 9500;
+  background: rgba(10,12,11,0.96);
+  align-items: center; justify-content: center;
+}
+.lightbox.open { display: flex; }
+.lb-img-wrap {
+  position: relative;
+  max-width: 90vw; max-height: 88vh;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.lb-img {
+  width: 80vw; max-width: 1100px;
+  height: 70vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  transition: opacity 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.lb-img-ph {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+.lb-counter {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--mid);
+}
+.lb-close {
+  position: fixed; top: 28px; right: 32px;
+  background: none; border: none; color: var(--mid);
+  font-size: 20px; cursor: pointer; z-index: 9501;
+  transition: color 0.2s; padding: 8px;
+}
+.lb-close:hover { color: var(--white); }
+.lb-prev, .lb-next {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  background: none; border: 1px solid var(--border);
+  color: var(--white); font-size: 18px;
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 9501;
+  transition: border-color 0.2s, background 0.2s;
+}
+.lb-prev:hover, .lb-next:hover { border-color: var(--accent); background: rgba(0,229,160,0.08); }
+.lb-prev { left: 24px; }
+.lb-next { right: 24px; }
+
+@media (max-width: 860px) {
+  .ph-grid { grid-template-columns: repeat(2, 1fr); }
+  .lb-prev { left: 8px; }
+  .lb-next { right: 8px; }
+}
+
+
+/* ── YOUTUBE HOVER PREVIEW ──────────────── */
+.work-item .yt-preview {
+  position: absolute; inset: 0;
+  z-index: 2; opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.work-item:hover .yt-preview {
+  opacity: 1;
+  pointer-events: all;
+}
+.work-item .yt-preview iframe {
+  width: 100%; height: 100%;
+  border: none;
+  pointer-events: none;
+}
+/* keep overlay and play btn above preview */
+.work-item .wi-overlay { z-index: 3; }
+.work-item .play-btn { z-index: 4; }
+.work-item:hover .play-btn { opacity: 0; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">ELVI</a>
+  <ul class="nav-links">
+    <li><a href="#video">Video</a></li>
+    <li><a href="#photo">Photo</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Hire Me</a>
+</nav>
+
+<!-- HERO
+     ▼ Change the photo: find .hero-bg in CSS, update background-image url ▼ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Video Editor &amp; Producer — South Florida</p>
+    <h1 class="hero-name">ELVI<br>LEVONJA</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">Seven years of storytelling through the lens — sports, product, and travel. Every frame crafted with intention.</p>
+    <div class="hero-foot">
+      <span class="scroll-hint">Scroll to explore</span>
+      <div class="hero-stats">
+        <div class="hstat"><span class="hstat-n">7+</span><span class="hstat-l">Years</span></div>
+        <div class="hstat"><span class="hstat-n">50+</span><span class="hstat-l">Projects</span></div>
+        <div class="hstat"><span class="hstat-n">3</span><span class="hstat-l">Disciplines</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- MARQUEE TICKER -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Video Editor</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Producer</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Sports Coverage</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Product Demo</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Travel Photography</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Adobe Premiere</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">After Effects</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">South Florida</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Video Editor</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Producer</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Sports Coverage</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Product Demo</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Travel Photography</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Adobe Premiere</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">After Effects</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">South Florida</span><span class="marquee-dot">·</span>
+  </div>
+</div>
+
+<!-- VIDEO -->
+<section id="video">
+  <div class="work-top reveal">
+    <div>
+      <div class="sec-rule"><p class="sec-label">Film & Broadcast</p></div>
+      <h2 class="sec-heading">VIDEO</h2>
+    </div>
+  </div>
+
+  <!--
+  ╔══════════════════════════════════════════════════════╗
+  ║  VIDEO CARDS — HOW TO EDIT                           ║
+  ║                                                      ║
+  ║  ADD THUMBNAIL: on .wi-bg add:                       ║
+  ║    style="background-image: url('thumb.jpg')"        ║
+  ║                                                      ║
+  ║  ADD YOUTUBE LINK: set data-url="https://youtube..." ║
+  ║  on the work-item div — clicking opens it            ║
+  ║                                                      ║
+  ║  SIZE: span-8 = large | span-6 = half                ║
+  ║  ADD: copy a block and paste inside video-grid       ║
+  ╚══════════════════════════════════════════════════════╝
+  -->
+  <div class="work-grid" id="videoGrid">
+
+    <div class="work-item span-6 reveal" data-url="https://www.youtube.com/watch?v=dfaLx8QdpVk" onclick="openVideo(this)" data-ytid="dfaLx8QdpVk">
+      <div class="wi-bg" style="/* background-image: url('demo-reel-thumb.jpg') */"></div>
+      <div class="wi-ph">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Add thumbnail</span>
+      </div>
+      <div class="wi-overlay">
+        <div class="wi-cat">Demo Reel</div>
+        <div class="wi-title">DEMO REEL</div>
+      </div>
+      <div class="play-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+    </div>
+
+    <div class="work-item span-6 reveal" style="aspect-ratio: 16/9;" data-url="https://www.youtube.com/watch?v=axrs6aPlWoE&t=739s" onclick="openVideo(this)" data-ytid="axrs6aPlWoE">
+      <div class="wi-bg" style="/* background-image: url('rap-league-thumb.jpg') */"></div>
+      <div class="wi-ph">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Add thumbnail</span>
+      </div>
+      <div class="wi-overlay">
+        <div class="wi-cat">Video · Live Event</div>
+        <div class="wi-title">RAP LEAGUE COVERAGE</div>
+      </div>
+      <div class="play-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+    </div>
+
+    <div class="work-item span-6 reveal" data-url="https://www.youtube.com/shorts/RXqICQ8nT3s" onclick="openVideo(this)" data-ytid="RXqICQ8nT3s">
+      <div class="wi-bg" style="/* background-image: url('autotq-thumb.jpg') */"></div>
+      <div class="wi-ph">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Add thumbnail</span>
+      </div>
+      <div class="wi-overlay">
+        <div class="wi-cat">Video · Product</div>
+        <div class="wi-title">AUTOTQ PRODUCT DEMO</div>
+      </div>
+      <div class="play-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+    </div>
+
+    <div class="work-item span-6 reveal" data-url="" onclick="openVideo(this)">
+      <div class="wi-bg" style="/* background-image: url('buddy-vid-thumb.jpg') */"></div>
+      <div class="wi-ph">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Add thumbnail — coming soon</span>
+      </div>
+      <div class="wi-overlay">
+        <div class="wi-cat">Video · Creative</div>
+        <div class="wi-title">MUSIC VIDEO</div>
+      </div>
+      <div class="play-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+    </div>
+
+    
+
+  </div>
+</section>
+
+<!-- PHOTO -->
+<section id="photo">
+  <div class="work-top reveal">
+    <div>
+      <div class="sec-rule"><p class="sec-label">Still Photography</p></div>
+      <h2 class="sec-heading">PHOTO</h2>
+    </div>
+    <div class="ftabs">
+      <button class="ftab active" onclick="switchGallery('landscape',this)">Landscape</button>
+      <button class="ftab" onclick="switchGallery('street',this)">Street & Travel</button>
+      <button class="ftab" onclick="switchGallery('product',this)">Product</button>
+    </div>
+  </div>
+
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  PHOTO GALLERIES — HOW TO EDIT                           ║
+  ║                                                          ║
+  ║  Each gallery = one data-gallery="name" grid             ║
+  ║  Each .ph-item = one photo                               ║
+  ║                                                          ║
+  ║  ADD YOUR PHOTO:                                         ║
+  ║    Replace the .ph-thumb div background-image url        ║
+  ║    style="background-image: url('your-photo.jpg')"       ║
+  ║                                                          ║
+  ║  ADD A PHOTO: copy a .ph-item block, paste inside grid   ║
+  ║  ADD A GALLERY: copy a gallery div, change data-gallery  ║
+  ║    and add a matching tab button above                    ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
+
+  <!-- LANDSCAPE gallery -->
+  <div class="photo-gallery active-gallery reveal" data-gallery="landscape">
+    <div class="ph-grid">
+      <div class="ph-item" onclick="openLightbox('landscape', 0)">
+        <div class="ph-thumb" style="background-image: url('landscape-1.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('landscape', 1)">
+        <div class="ph-thumb" style="background-image: url('landscape-2.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('landscape', 2)">
+        <div class="ph-thumb" style="background-image: url('landscape-3.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('landscape', 3)">
+        <div class="ph-thumb" style="background-image: url('landscape-4.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('landscape', 4)">
+        <div class="ph-thumb" style="background-image: url('landscape-5.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('landscape', 5)">
+        <div class="ph-thumb" style="background-image: url('landscape-6.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STREET & TRAVEL gallery -->
+  <div class="photo-gallery reveal" data-gallery="street" style="display:none">
+          <div class="ph-grid">
+      <div class="ph-item" onclick="openLightbox('street', 0)">
+        <div class="ph-thumb" style="background-image: url('street-1.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 1)">
+        <div class="ph-thumb" style="background-image: url('street-2.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 2)">
+        <div class="ph-thumb" style="background-image: url('street-3.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 3)">
+        <div class="ph-thumb" style="background-image: url('street-4.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 4)">
+        <div class="ph-thumb" style="background-image: url('street-5.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 5)">
+        <div class="ph-thumb" style="background-image: url('street-6.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 6)">
+        <div class="ph-thumb" style="background-image: url('street-7.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 7)">
+        <div class="ph-thumb" style="background-image: url('street-8.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 8)">
+        <div class="ph-thumb" style="background-image: url('street-9.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 9)">
+        <div class="ph-thumb" style="background-image: url('street-10.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 10)">
+        <div class="ph-thumb" style="background-image: url('street-11.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 11)">
+        <div class="ph-thumb" style="background-image: url('street-12.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 12)">
+        <div class="ph-thumb" style="background-image: url('street-13.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 13)">
+        <div class="ph-thumb" style="background-image: url('street-14.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 14)">
+        <div class="ph-thumb" style="background-image: url('street-15.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 15)">
+        <div class="ph-thumb" style="background-image: url('street-16.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 16)">
+        <div class="ph-thumb" style="background-image: url('street-17.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 17)">
+        <div class="ph-thumb" style="background-image: url('street-18.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 18)">
+        <div class="ph-thumb" style="background-image: url('street-19.jpg')"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      </div>
+  </div>
+      <div class="ph-item" onclick="openLightbox('street', 1)">
+        <div class="ph-thumb" style="/* background-image: url('street-2.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 2)">
+        <div class="ph-thumb" style="/* background-image: url('street-3.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 3)">
+        <div class="ph-thumb" style="/* background-image: url('street-4.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 4)">
+        <div class="ph-thumb" style="/* background-image: url('street-5.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('street', 5)">
+        <div class="ph-thumb" style="/* background-image: url('street-6.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT gallery -->
+  <div class="photo-gallery reveal" data-gallery="product" style="display:none">
+    <div class="ph-grid">
+      <div class="ph-item" onclick="openLightbox('product', 0)">
+        <div class="ph-thumb" style="/* background-image: url('product-photo-1.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('product', 1)">
+        <div class="ph-thumb" style="/* background-image: url('product-photo-2.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('product', 2)">
+        <div class="ph-thumb" style="/* background-image: url('product-photo-3.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('product', 3)">
+        <div class="ph-thumb" style="/* background-image: url('product-photo-4.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('product', 4)">
+        <div class="ph-thumb" style="/* background-image: url('product-photo-5.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+      <div class="ph-item" onclick="openLightbox('product', 5)">
+        <div class="ph-thumb" style="/* background-image: url('product-photo-6.jpg') */"></div>
+        <div class="ph-ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="ph-overlay"><span>View</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+    <button class="lb-close" onclick="closeLightbox()">&#10005;</button>
+    <button class="lb-prev" onclick="lbNav(-1)">&#8592;</button>
+    <button class="lb-next" onclick="lbNav(1)">&#8594;</button>
+    <div class="lb-img-wrap">
+      <div class="lb-img" id="lbImg"></div>
+      <div class="lb-counter" id="lbCounter"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <div class="sec-rule"><p class="sec-label">About me</p></div>
+    <h2 class="sec-heading">THE EDITOR</h2>
+  </div>
+  <div class="about-grid">
+
+    <!-- ▼ HEADSHOT — replace placeholder with: <img src="your-photo.jpg"> inside .about-photo-wrap ▼ -->
+    <div class="about-photo-wrap reveal">
+      <div class="about-photo-ph">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Your photo here</span>
+      </div>
+    </div>
+
+    <div class="about-right">
+      <div class="about-bio reveal">
+        <!-- ▼ EDIT YOUR BIO ▼ -->
+        <p>I'm <strong>Elvi</strong> — a video editor and producer based in South Florida with over <strong>7 years</strong> of experience creating content that hits.</p>
+        <p>My work spans collegiate sports highlights, product demo reels, and hobbyist travel photography. I care about pacing, color, and the story each frame tells.</p>
+        <p>I work across the full <strong>Adobe Creative Suite</strong> — Premiere Pro, After Effects, Audition — and bring a professional eye to everything I touch.</p>
+      </div>
+      <div class="about-facts reveal">
+        <!-- ▼ EDIT YOUR DETAILS ▼ -->
+        <div class="fact-row"><span class="fact-key">Based</span><span class="fact-val">South Florida</span></div>
+        <div class="fact-row"><span class="fact-key">Experience</span><span class="fact-val">7+ Years</span></div>
+        <div class="fact-row"><span class="fact-key">Primary tool</span><span class="fact-val">Adobe Premiere Pro</span></div>
+        <div class="fact-row"><span class="fact-key">Also uses</span><span class="fact-val">After Effects · Audition</span></div>
+        <div class="fact-row"><span class="fact-key">Disciplines</span><span class="fact-val">Sports · Product · Travel</span></div>
+        <div class="fact-row"><span class="fact-key">Availability</span><span class="fact-val">Open to work</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT
+     ▼ To receive real emails: go to formspree.io, create a free form,
+       then add  action="https://formspree.io/f/YOURCODE" method="POST"  to the <form> tag ▼ -->
+<section id="contact">
+  <div class="reveal">
+    <div class="sec-rule"><p class="sec-label">Work with me</p></div>
+    <h2 class="sec-heading">LET'S CREATE</h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-left reveal">
+      <p>Open to freelance projects, collaborations, and full-time roles. Based in South Florida — available remotely.</p>
+      <div class="contact-details">
+        <div class="cdet"><div class="cdet-dot"></div><span><strong>Location</strong> — South Florida, FL</span></div>
+        <div class="cdet"><div class="cdet-dot"></div><span><strong>Remote</strong> — Available worldwide</span></div>
+        <div class="cdet"><div class="cdet-dot"></div><span><strong>Response</strong> — Within 24 hours</span></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form id="contactForm" onsubmit="submitForm(event)">
+        <div class="frow">
+          <div class="fg"><label class="fl">Name</label><input type="text" class="fi" placeholder="Your name" required></div>
+          <div class="fg"><label class="fl">Email</label><input type="email" class="fi" placeholder="you@email.com" required></div>
+        </div>
+        <div class="fg">
+          <label class="fl">Project type</label>
+          <select class="fs">
+            <option value="">What are you looking for?</option>
+            <option>Video Editing / Post-Production</option>
+            <option>Sports Coverage</option>
+            <option>Product Video</option>
+            <option>Photography</option>
+            <option>Full-Time / Staff Role</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Message</label><textarea class="ft" placeholder="Tell me about the project…" required></textarea></div>
+        <button type="submit" class="fsub">Send Message</button>
+        <div class="fsuccess" id="formSuccess">✓ Sent — I'll be in touch within 24 hours.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="f-logo" href="#hero">ELVI</a>
+  <span class="f-copy">© 2026 Elvi Levonja. All Rights Reserved.</span>
+</footer>
+
+<script>
+// scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// open video in new tab
+function openVideo(el) {
+  const url = el.dataset.url;
+  if (url && url !== 'https://youtube.com' && url !== '') window.open(url, '_blank');
+}
+
+// YouTube hover preview
+document.querySelectorAll('.work-item[data-ytid]').forEach(card => {
+  const ytid = card.dataset.ytid;
+  let preview = null;
+  let loaded = false;
+
+  card.addEventListener('mouseenter', () => {
+    if (!loaded) {
+      preview = document.createElement('div');
+      preview.className = 'yt-preview';
+      preview.innerHTML = `<iframe
+        src="https://www.youtube.com/embed/${ytid}?autoplay=1&mute=1&loop=1&playlist=${ytid}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&start=0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>`;
+      card.appendChild(preview);
+      loaded = true;
+    } else if (preview) {
+      preview.style.opacity = '1';
+    }
+  });
+
+  card.addEventListener('mouseleave', () => {
+    if (preview) {
+      preview.style.opacity = '0';
+      // reload iframe to stop playback and reset for next hover
+      setTimeout(() => {
+        if (preview) {
+          const iframe = preview.querySelector('iframe');
+          if (iframe) { const src = iframe.src; iframe.src = ''; iframe.src = src; }
+          preview.style.opacity = '0';
+        }
+      }, 400);
+    }
+  });
+});
+
+// photo gallery tabs
+function switchGallery(name, btn) {
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.photo-gallery').forEach(g => {
+    g.style.display = g.dataset.gallery === name ? '' : 'none';
+  });
+}
+
+// lightbox
+let lbGallery = '', lbIndex = 0;
+
+function getGalleryImages(gallery) {
+  const grid = document.querySelector(`.photo-gallery[data-gallery="${gallery}"] .ph-grid`);
+  return Array.from(grid.querySelectorAll('.ph-thumb')).map(t => t.style.backgroundImage);
+}
+
+function openLightbox(gallery, index) {
+  lbGallery = gallery;
+  lbIndex = index;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderLightbox();
+}
+
+function renderLightbox() {
+  const imgs = getGalleryImages(lbGallery);
+  const img = document.getElementById('lbImg');
+  const counter = document.getElementById('lbCounter');
+  const src = imgs[lbIndex];
+  if (src && src !== '') {
+    img.style.backgroundImage = src;
+    img.innerHTML = '';
+  } else {
+    img.style.backgroundImage = '';
+    img.innerHTML = '<span class="lb-img-ph">Add your photo here</span>';
+  }
+  counter.textContent = (lbIndex + 1) + ' / ' + imgs.length;
+}
+
+function lbNav(dir) {
+  const imgs = getGalleryImages(lbGallery);
+  lbIndex = (lbIndex + dir + imgs.length) % imgs.length;
+  const img = document.getElementById('lbImg');
+  img.style.opacity = '0';
+  setTimeout(() => { renderLightbox(); img.style.opacity = '1'; }, 150);
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeLightboxOutside(e) {
+  if (e.target.id === 'lightbox') closeLightbox();
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') lbNav(1);
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// contact form
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('formSuccess').style.display = 'block';
+  e.target.querySelectorAll('input,textarea,select,button').forEach(el => el.disabled = true);
+}
+</script>
+</body>
+</html>
